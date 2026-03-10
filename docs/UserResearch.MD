@@ -7,9 +7,9 @@
   * Supporting Data: (Small daily tasks 46.7%) (Customizable 35.7%)
   * Team Action (if any): Decide if we make it customizable or we just have the daily tasks.
 * Observation 3:
-  * Observation Statement:
-  * Supporting Data:
-  * Team Action (if any):
+  * Observation Statement:  Customers find a it valuable to have our automatic study plan adjust when they miss a sessions (44.2$ -> 4/5, 30.2% 5/5). Addtionally they'd           prefer weekly plans generated every Sunday over daily plans generated every morning. Blue and white is by far the most popular scheme. 
+  * Supporting Data: 44.2$ -> 4/5 & 30.2% 5/5 for missing study session question, 81.4% Weekly > Daily, 9.3% Blue & white color scheme (most counts across the board-> 4)
+  * Team Action (if any): Incorporate weekly study plans to be generated in tasks section, and include application logic for missing study plan sessions.
 * Observation 4:
   * Observation Statement:
   * Supporting Data:

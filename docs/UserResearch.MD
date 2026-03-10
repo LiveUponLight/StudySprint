@@ -11,6 +11,6 @@
   * Supporting Data: 44.2$ -> 4/5 & 30.2% 5/5 for missing study session question, 81.4% Weekly > Daily, 9.3% Blue & white color scheme (most counts across the board-> 4)
   * Team Action (if any): Incorporate weekly study plans to be generated in tasks section, and include application logic for missing study plan sessions.
 * Observation 4:
-  * Observation Statement:
-  * Supporting Data:
-  * Team Action (if any):
+  * Observation Statement: Many users want a study planner that includes automation, reminders, and integrations with calendars or school systems to help manage their schedules more easily.
+  * Supporting Data: Multiple responses mentioned features such as AI scheduling, calendar syncing, notifications, progress tracking, customizable schedules, and study tips.
+  * Team Action (if any): Our team will consider implementing calendar integration, customizable schedules, and reminder notifications to help users automatically organize and track their study time.

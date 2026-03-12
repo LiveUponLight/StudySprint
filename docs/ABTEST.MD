@@ -12,13 +12,13 @@
   * Hypothesis:
   * Experiment:
   * Variations:
-* AB Test 3:
-  * Test Name:
-  * User Story Number:
-  * Metrics:
-  * Hypothesis:
-  * Experiment:
-  * Variations:
+* AB Test 3: 
+  * Test Name: Syllabus Upload Prompt Placement Test
+  * User Story Number: US1 Account Creation
+  * Metrics: % of users who upload a syllabus within 24 hours of signup; % of users who generate their first study plan
+  * Hypothesis:  New users often drop off after account creation because the syllabus upload prompt appears too early or is overlooked. By moving the prompt to appear          after a brief onboarding tutorial, we hypothesize that more users will understand its value and complete the upload, increasing first-study-plan generation by 10%.
+  * Experiment: Using Firebase Remote Config, we will roll out the experiment to 50% of new Android and iOS users (control sees prompt immediately; variation sees prompt       after tutorial) to balance statistical significance with risk mitigation. Firebase Analytics will track custom events:                                                      syllabus_upload_started,syllabus_upload_completed, and first_study_plan_generated, segmented by variant.
+  * Variations: Control A: Syllabus upload prompt appears immediately after account creation. Variation B: Syllabus upload prompt appears after a 3-screen onboarding          tutorial highlighting key features.
 * AB Test 4:
   * Test Name:
   * User Story Number:

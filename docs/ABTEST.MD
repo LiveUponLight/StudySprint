@@ -20,9 +20,9 @@
   * Experiment: Using Firebase Remote Config, we will roll out the experiment to 50% of new Android and iOS users (control sees prompt immediately; variation sees prompt       after tutorial) to balance statistical significance with risk mitigation. Firebase Analytics will track custom events:                                                      syllabus_upload_started,syllabus_upload_completed, and first_study_plan_generated, segmented by variant.
   * Variations: Control A: Syllabus upload prompt appears immediately after account creation. Variation B: Syllabus upload prompt appears after a 3-screen onboarding          tutorial highlighting key features.
 * AB Test 4:
-  * Test Name:
-  * User Story Number:
-  * Metrics:
-  * Hypothesis:
-  * Experiment:
-  * Variations:
+  * Test Name: Study Plan Visibility: Dashboard Schedule vs Quick Start Button
+  * User Story Number: US3
+  * Metrics: Engagement 
+  * Hypothesis: If we add a prominent “Start Study Session” button on the dashboard, users will begin study sessions faster and more frequently compared to users who must navigate through their schedule manually. This will increase engagement metrics such as study sessions logged and time spent in the app.
+  * Experiment: Using Firebase A/B Testing and Remote Config, 50% of StudySprint users will see the current dashboard design while the other 50% will see a dashboard with a prominent “Start Study Session” button, and Firebase Analytics will track events such as app opens, schedule views, and study sessions started to measure engagement differences between the two groups.
+  * Variations: Variation A (Control) will show the current dashboard where users must open their study plan and manually select a task before starting a session, while Variation B (Experiment) will display a highlighted “Start Study Session” button on the dashboard that allows users to begin their next recommended study task with a single tap.

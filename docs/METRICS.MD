@@ -1,5 +1,1 @@
-[Google Slides HEART Framework] https://docs.google.com/presentation/d/1jVMeOnFYl8CtAu563yHkVjn_ouRaAmIuPjFWImEfNnc/edit?usp=sharing
-
-Metrics 1 - **NPS (Net Promoter Score)** – After users complete the Golden Path (uploading their syllabus or schedule), the app asks “How likely are you to recommend Study Sprint to a friend?” on a 0–10 scale. The response is stored in Firebase Firestore under an `npsResponses` collection and optionally logged as a Firebase Analytics event called `nps_submitted`.
-
-Metrics 2 - Adoption - Number of new users per week: This metric could be collected automatically using Firebase Authentication, which records each new account creation. The backend stores the createdAt timestamp at which an account is created by utilizing Cloud Firestore which counts new users created during each week. Similarily, when a user uploads a syllabus, the app saves an uploadTimestamp in Cloud Firestore. The backend compares this timestamp with the user’s createdAt value to determine if the upload occurred within 24 hours.
+[Google Slides HEART Framework] https://docs.google.com/presentation/d/1RuvUxC2u0dZN1_ZoiPT68mz0F_x5vERkwg3GdgTIgho/edit?usp=sharing

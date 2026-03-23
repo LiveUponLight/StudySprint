@@ -6,12 +6,12 @@
   * Experiment: Audience - 50% of random users. I want it to be completely random so we can gather data from which user group is more likely to login multiple times over the course of a week. If one of the two groups has a significantly higher retention rate, we will go with that design.
   * Variations: One variation will include a daily login progress bar as a pop-up upon login, maybe with a point-system and the inclusion of a leaderboard. The other variation will not include a daily login progress bar.
 * AB Test 2:
-  * Test Name:
-  * User Story Number:
-  * Metrics:
-  * Hypothesis:
-  * Experiment:
-  * Variations:
+  * Test Name: Study Reminder Notification Timing Test
+  * User Story Number: US 3
+  * Metrics: Engagement (study sessions started), Retention
+  * Hypothesis: Students may forget or delay studying if reminders are not timed effectively. By sending personalized study reminders based on a user’s schedule instead of fixed-time reminders, users will be more likely to start study sessions, increasing both engagement and retention.
+  * Experiment: Using Firebase Remote Config and Firebase Cloud Messaging, 50% of users will receive generic fixed-time reminders (e.g., 6pm daily), while the other 50% will receive personalized reminders based on their uploaded schedule and past activity. Firebase Analytics will track events such as notification_opened, study_session_started, and daily_active_user to measure effectiveness.
+  * Variations: Control A will send users a fixed daily reminder at the same time each day. Variation B will send users personalized reminders based on their study schedule and past behavior patterns, such as before planned sessions or during times they are most active.
 * AB Test 3: 
   * Test Name: Syllabus Upload Prompt Placement Test
   * User Story Number: US1 Account Creation

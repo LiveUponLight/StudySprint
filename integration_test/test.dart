@@ -52,6 +52,31 @@ void main() async {
     FocusManager.instance.primaryFocus?.unfocus();
     await tester.tap(find.byKey(const ValueKey('confirm_upmw')));
   });
+
+  testWidgets('US1 Sign Up', (WidgetTester tester) async {
+    _overrideOnError();
+
+    await tester.pumpWidget(MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+          create: (context) => FFAppState(),
+        ),
+      ],
+      child: const MyApp(),
+    ));
+    await GoogleFonts.pendingFonts();
+
+    await tester.pumpAndSettle(const Duration(milliseconds: 3000));
+    await tester.enterText(
+        find.byKey(const ValueKey('signupEmail_q4yt')), 'testuserrr@mail.com');
+    await tester.enterText(
+        find.byKey(const ValueKey('signupPassword_yvhx')), '123456');
+    await tester.enterText(
+        find.byKey(const ValueKey('signupConfirmPassword_629x')), '123456');
+    await tester.tap(find.byKey(const ValueKey('signupButton_fxns')));
+    await tester.pumpAndSettle(const Duration(milliseconds: 3000));
+    expect(find.text('Copy & Paste'), findsWidgets);
+  });
 }
 
 // There are certain types of errors that can happen during tests but

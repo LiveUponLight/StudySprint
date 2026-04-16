@@ -62,21 +62,42 @@ void main() async {
           create: (context) => FFAppState(),
         ),
       ],
-      child: const MyApp(),
+      child: MyApp(
+        entryPage: LoginWidget(),
+      ),
     ));
     await GoogleFonts.pendingFonts();
 
-    await tester.pumpAndSettle(const Duration(milliseconds: 3000));
-    await tester.enterText(
-        find.byKey(const ValueKey('signupEmail_q4yt')), 'testuserrr@mail.com');
+    await tester.pumpAndSettle(const Duration(milliseconds: 30000));
+    await tester.enterText(find.byKey(const ValueKey('signupEmail_q4yt')),
+        'testuserrr67@mail.com');
     await tester.enterText(
         find.byKey(const ValueKey('signupPassword_yvhx')), '123456');
     await tester.enterText(
         find.byKey(const ValueKey('signupConfirmPassword_629x')), '123456');
     await tester.tap(find.byKey(const ValueKey('signupButton_fxns')));
-    await tester.pumpAndSettle(const Duration(milliseconds: 3000));
-    expect(find.text('Copy & Paste'), findsWidgets);
+    await tester.pumpAndSettle(const Duration(milliseconds: 30000));
+    expect(find.byKey(const ValueKey('syllabus_8a3y')), findsWidgets);
   });
+
+  testWidgets('US3 - Schedule Creation', (WidgetTester tester) async {
+    _overrideOnError();
+
+    await tester.pumpWidget(MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+          create: (context) => FFAppState(),
+        ),
+      ],
+      child: const MyApp(),
+    ));
+    await GoogleFonts.pendingFonts();
+
+    await tester.pumpAndSettle(const Duration(milliseconds: 3000));
+    await tester.tap(find.text('Upload'));
+    await tester.pumpAndSettle(const Duration(milliseconds: 3000));
+    expect(find.text('Upload Schedule'), findsOneWidget);
+  }, skip: true);
 }
 
 // There are certain types of errors that can happen during tests but

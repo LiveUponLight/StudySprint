@@ -95,24 +95,19 @@ GoRouter createRouter(AppStateNotifier appStateNotifier, [Widget? entryPage]) {
             : LoginWidget(),
       ),
       FFRoute(
+        name: StudyPreview2Widget.routeName,
+        path: StudyPreview2Widget.routePath,
+        builder: (context, params) => StudyPreview2Widget(),
+      ),
+      FFRoute(
         name: UploadScheduleWidget.routeName,
         path: UploadScheduleWidget.routePath,
         builder: (context, params) => UploadScheduleWidget(),
       ),
       FFRoute(
-        name: ScheduleWidget.routeName,
-        path: ScheduleWidget.routePath,
-        builder: (context, params) => ScheduleWidget(),
-      ),
-      FFRoute(
         name: LoginWidget.routeName,
         path: LoginWidget.routePath,
         builder: (context, params) => LoginWidget(),
-      ),
-      FFRoute(
-        name: StudyPreview2Widget.routeName,
-        path: StudyPreview2Widget.routePath,
-        builder: (context, params) => StudyPreview2Widget(),
       ),
       FFRoute(
         name: TaskViewWidget.routeName,

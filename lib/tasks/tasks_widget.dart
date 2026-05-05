@@ -1,10 +1,10 @@
 import '/auth/firebase_auth/auth_util.dart';
 import '/backend/backend.dart';
 import '/backend/schema/enums/enums.dart';
+import '/components/delete_popup_widget.dart';
 import '/components/n_p_s_popup_widget.dart';
 import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_util.dart';
-import '/flutter_flow/flutter_flow_widgets.dart';
 import '/custom_code/actions/index.dart' as actions;
 import '/flutter_flow/custom_functions.dart' as functions;
 import '/index.dart';
@@ -104,17 +104,21 @@ class _TasksWidgetState extends State<TasksWidget> {
 
     return StreamBuilder<List<StudyPlanRecord>>(
       stream: queryStudyPlanRecord(
-        queryBuilder: (studyPlanRecord) => studyPlanRecord.where(
-          'userId',
-          isEqualTo: currentUserUid,
-        ),
-        singleRecord: true,
+        queryBuilder: (studyPlanRecord) => studyPlanRecord
+            .where(
+              'userId',
+              isEqualTo: currentUserUid,
+            )
+            .where(
+              'isDeleted',
+              isEqualTo: false,
+            ),
       ),
       builder: (context, snapshot) {
         // Customize what your widget looks like when it's loading.
         if (!snapshot.hasData) {
           return Scaffold(
-            backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
+            backgroundColor: Color(0xFF0D0D1A),
             body: Center(
               child: SizedBox(
                 width: 50.0,
@@ -129,13 +133,6 @@ class _TasksWidgetState extends State<TasksWidget> {
           );
         }
         List<StudyPlanRecord> tasksStudyPlanRecordList = snapshot.data!;
-        // Return an empty Container when the item does not exist.
-        if (snapshot.data!.isEmpty) {
-          return Container();
-        }
-        final tasksStudyPlanRecord = tasksStudyPlanRecordList.isNotEmpty
-            ? tasksStudyPlanRecordList.first
-            : null;
 
         return GestureDetector(
           onTap: () {
@@ -144,291 +141,126 @@ class _TasksWidgetState extends State<TasksWidget> {
           },
           child: Scaffold(
             key: scaffoldKey,
-            backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
-            body: SafeArea(
-              top: true,
-              child: Column(
-                mainAxisSize: MainAxisSize.max,
-                children: [
-                  Row(
-                    mainAxisSize: MainAxisSize.max,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Align(
-                        alignment: AlignmentDirectional(0.0, 0.0),
-                        child: Text(
-                          'Tasks',
-                          textAlign: TextAlign.start,
-                          style: GoogleFonts.interTight(
-                            color: Color(0x00000000),
-                            fontSize: 40.0,
-                          ),
-                        ),
-                      ),
-                      Column(
+            backgroundColor: Color(0xFF0D0D1A),
+            drawer: Drawer(
+              elevation: 16.0,
+              child: Container(
+                width: 100.0,
+                height: 100.0,
+                decoration: BoxDecoration(
+                  color: Color(0xFF8888AA),
+                  borderRadius: BorderRadius.only(),
+                ),
+                child: Column(
+                  mainAxisSize: MainAxisSize.max,
+                  children: [
+                    Padding(
+                      padding:
+                          EdgeInsetsDirectional.fromSTEB(0.0, 64.0, 0.0, 0.0),
+                      child: Row(
                         mainAxisSize: MainAxisSize.max,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Row(
-                            mainAxisSize: MainAxisSize.max,
-                            children: [
-                              Text(
-                                'Week: ${valueOrDefault<String>(
-                                  FFAppState().WhichWeek.toString(),
-                                  'Week: 0',
-                                )}',
-                                style: FlutterFlowTheme.of(context)
-                                    .bodyMedium
-                                    .override(
-                                      font: GoogleFonts.inter(
-                                        fontWeight: FlutterFlowTheme.of(context)
-                                            .bodyMedium
-                                            .fontWeight,
-                                        fontStyle: FlutterFlowTheme.of(context)
-                                            .bodyMedium
-                                            .fontStyle,
-                                      ),
-                                      letterSpacing: 0.0,
-                                      fontWeight: FlutterFlowTheme.of(context)
-                                          .bodyMedium
-                                          .fontWeight,
-                                      fontStyle: FlutterFlowTheme.of(context)
-                                          .bodyMedium
-                                          .fontStyle,
-                                    ),
-                              ),
-                              FlutterFlowIconButton(
-                                borderRadius: 8.0,
-                                buttonSize: 27.2,
-                                fillColor: FlutterFlowTheme.of(context).primary,
-                                icon: Icon(
-                                  Icons.arrow_back,
-                                  color: FlutterFlowTheme.of(context).info,
-                                  size: 10.0,
-                                ),
-                                onPressed: () async {
-                                  logFirebaseEvent(
-                                      'TASKS_PAGE_arrow_back_ICN_ON_TAP');
-                                  logFirebaseEvent(
-                                      'IconButton_update_app_state');
-                                  FFAppState().WhichWeek =
-                                      FFAppState().WhichWeek +
-                                          ((FFAppState().WhichWeek > 0) &&
-                                                  (FFAppState().WhichWeek <=
-                                                      tasksStudyPlanRecord!
-                                                          .totalWeeks)
-                                              ? -1
-                                              : 0);
-                                  safeSetState(() {});
-                                },
-                              ),
-                              FlutterFlowIconButton(
-                                borderRadius: 8.0,
-                                buttonSize: 27.2,
-                                fillColor: FlutterFlowTheme.of(context).primary,
-                                icon: Icon(
-                                  Icons.arrow_forward,
-                                  color: FlutterFlowTheme.of(context).info,
-                                  size: 10.0,
-                                ),
-                                onPressed: () async {
-                                  logFirebaseEvent(
-                                      'TASKS_PAGE_arrow_forward_ICN_ON_TAP');
-                                  logFirebaseEvent(
-                                      'IconButton_update_app_state');
-                                  FFAppState().WhichWeek =
-                                      FFAppState().WhichWeek +
-                                          ((FFAppState().WhichWeek >= 0) &&
-                                                  (FFAppState().WhichWeek <
-                                                      (tasksStudyPlanRecord!
-                                                              .totalWeeks -
-                                                          1))
-                                              ? 1
-                                              : 0);
-                                  safeSetState(() {});
-                                },
-                              ),
-                            ],
+                          Padding(
+                            padding: EdgeInsetsDirectional.fromSTEB(
+                                0.0, 0.0, 5.0, 0.0),
+                            child: Icon(
+                              Icons.auto_stories_rounded,
+                              color: Color(0xFF1A6BFF),
+                              size: 25.0,
+                            ),
                           ),
-                          Row(
-                            mainAxisSize: MainAxisSize.max,
-                            children: [
-                              Text(
-                                valueOrDefault<String>(
-                                  'Day: ${FFAppState().DayOfWeek}',
-                                  'Day: monday',
+                          Text(
+                            'StudySprint',
+                            style: FlutterFlowTheme.of(context)
+                                .bodyMedium
+                                .override(
+                                  font: GoogleFonts.inter(
+                                    fontWeight: FontWeight.bold,
+                                    fontStyle: FlutterFlowTheme.of(context)
+                                        .bodyMedium
+                                        .fontStyle,
+                                  ),
+                                  color: Colors.white,
+                                  fontSize: 20.0,
+                                  letterSpacing: 0.0,
+                                  fontWeight: FontWeight.bold,
+                                  fontStyle: FlutterFlowTheme.of(context)
+                                      .bodyMedium
+                                      .fontStyle,
                                 ),
-                                style: FlutterFlowTheme.of(context)
-                                    .bodyMedium
-                                    .override(
-                                      font: GoogleFonts.inter(
-                                        fontWeight: FlutterFlowTheme.of(context)
-                                            .bodyMedium
-                                            .fontWeight,
-                                        fontStyle: FlutterFlowTheme.of(context)
-                                            .bodyMedium
-                                            .fontStyle,
-                                      ),
-                                      letterSpacing: 0.0,
-                                      fontWeight: FlutterFlowTheme.of(context)
-                                          .bodyMedium
-                                          .fontWeight,
-                                      fontStyle: FlutterFlowTheme.of(context)
-                                          .bodyMedium
-                                          .fontStyle,
-                                    ),
-                              ),
-                              FlutterFlowIconButton(
-                                borderRadius: 8.0,
-                                buttonSize: 27.2,
-                                fillColor: FlutterFlowTheme.of(context).primary,
-                                icon: Icon(
-                                  Icons.arrow_back,
-                                  color: FlutterFlowTheme.of(context).info,
-                                  size: 10.0,
-                                ),
-                                onPressed: () async {
-                                  logFirebaseEvent(
-                                      'TASKS_PAGE_arrow_back_ICN_ON_TAP');
-                                  logFirebaseEvent(
-                                      'IconButton_update_app_state');
-                                  FFAppState().DayOfWeek = () {
-                                    if (FFAppState().DayOfWeek ==
-                                        DaysOfTheWeek.monday.name) {
-                                      return DaysOfTheWeek.friday.name;
-                                    } else if (FFAppState().DayOfWeek ==
-                                        DaysOfTheWeek.friday.name) {
-                                      return DaysOfTheWeek.thursday.name;
-                                    } else if (FFAppState().DayOfWeek ==
-                                        DaysOfTheWeek.thursday.name) {
-                                      return DaysOfTheWeek.wednesday.name;
-                                    } else if (FFAppState().DayOfWeek ==
-                                        DaysOfTheWeek.wednesday.name) {
-                                      return DaysOfTheWeek.tuesday.name;
-                                    } else {
-                                      return DaysOfTheWeek.monday.name;
-                                    }
-                                  }();
-                                  safeSetState(() {});
-                                },
-                              ),
-                              FlutterFlowIconButton(
-                                borderRadius: 8.0,
-                                buttonSize: 27.2,
-                                fillColor: FlutterFlowTheme.of(context).primary,
-                                icon: Icon(
-                                  Icons.arrow_forward,
-                                  color: FlutterFlowTheme.of(context).info,
-                                  size: 10.0,
-                                ),
-                                onPressed: () async {
-                                  logFirebaseEvent(
-                                      'TASKS_PAGE_arrow_forward_ICN_ON_TAP');
-                                  logFirebaseEvent(
-                                      'IconButton_update_app_state');
-                                  FFAppState().DayOfWeek = () {
-                                    if (FFAppState().DayOfWeek ==
-                                        DaysOfTheWeek.monday.name) {
-                                      return DaysOfTheWeek.tuesday.name;
-                                    } else if (FFAppState().DayOfWeek ==
-                                        DaysOfTheWeek.tuesday.name) {
-                                      return DaysOfTheWeek.wednesday.name;
-                                    } else if (FFAppState().DayOfWeek ==
-                                        DaysOfTheWeek.wednesday.name) {
-                                      return DaysOfTheWeek.thursday.name;
-                                    } else if (FFAppState().DayOfWeek ==
-                                        DaysOfTheWeek.thursday.name) {
-                                      return DaysOfTheWeek.friday.name;
-                                    } else {
-                                      return DaysOfTheWeek.monday.name;
-                                    }
-                                  }();
-                                  safeSetState(() {});
-                                },
-                              ),
-                            ],
                           ),
                         ],
                       ),
-                    ],
-                  ),
-                  Align(
-                    alignment: AlignmentDirectional(-1.0, 0.0),
-                    child: Container(
-                      height: 600.0,
-                      decoration: BoxDecoration(),
-                      child: Padding(
-                        padding:
-                            EdgeInsetsDirectional.fromSTEB(0.0, 40.0, 0.0, 0.0),
-                        child: SingleChildScrollView(
-                          child: Column(
-                            mainAxisSize: MainAxisSize.max,
-                            children: [
-                              Builder(
-                                builder: (context) {
-                                  final taskList = functions
-                                      .getDayTasks(
-                                          tasksStudyPlanRecord!.weeks,
-                                          FFAppState().WhichWeek,
-                                          FFAppState().DayOfWeek)
-                                      .toList();
+                    ),
+                    Text(
+                      'Switch Syllabus:',
+                      style: FlutterFlowTheme.of(context).bodyMedium.override(
+                            font: GoogleFonts.inter(
+                              fontWeight: FlutterFlowTheme.of(context)
+                                  .bodyMedium
+                                  .fontWeight,
+                              fontStyle: FlutterFlowTheme.of(context)
+                                  .bodyMedium
+                                  .fontStyle,
+                            ),
+                            color: Colors.white,
+                            fontSize: 20.0,
+                            letterSpacing: 0.0,
+                            fontWeight: FlutterFlowTheme.of(context)
+                                .bodyMedium
+                                .fontWeight,
+                            fontStyle: FlutterFlowTheme.of(context)
+                                .bodyMedium
+                                .fontStyle,
+                          ),
+                    ),
+                    Column(
+                      mainAxisSize: MainAxisSize.max,
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Builder(
+                          builder: (context) {
+                            final syllabi = tasksStudyPlanRecordList.toList();
 
-                                  return ListView.builder(
-                                    padding: EdgeInsets.zero,
-                                    shrinkWrap: true,
-                                    scrollDirection: Axis.vertical,
-                                    itemCount: taskList.length,
-                                    itemBuilder: (context, taskListIndex) {
-                                      final taskListItem =
-                                          taskList[taskListIndex];
-                                      return Container(
-                                        width: 100.0,
-                                        height: 100.0,
-                                        decoration: BoxDecoration(
-                                          color: FlutterFlowTheme.of(context)
-                                              .secondaryBackground,
-                                        ),
-                                        child: Text(
-                                          taskListItem,
-                                          style: FlutterFlowTheme.of(context)
-                                              .bodyMedium
-                                              .override(
-                                                font: GoogleFonts.inter(
-                                                  fontWeight:
-                                                      FlutterFlowTheme.of(
-                                                              context)
-                                                          .bodyMedium
-                                                          .fontWeight,
-                                                  fontStyle:
-                                                      FlutterFlowTheme.of(
-                                                              context)
-                                                          .bodyMedium
-                                                          .fontStyle,
-                                                ),
-                                                letterSpacing: 0.0,
-                                                fontWeight:
-                                                    FlutterFlowTheme.of(context)
-                                                        .bodyMedium
-                                                        .fontWeight,
-                                                fontStyle:
-                                                    FlutterFlowTheme.of(context)
-                                                        .bodyMedium
-                                                        .fontStyle,
-                                              ),
-                                        ),
-                                      );
-                                    },
-                                  );
-                                },
-                              ),
-                              if (getRemoteConfigBool('show_streak_feature') ==
-                                  true)
-                                Container(
-                                  decoration: BoxDecoration(),
-                                  child: Column(
-                                    mainAxisSize: MainAxisSize.max,
-                                    children: [
-                                      Text(
-                                        'Streak ',
+                            return ListView.builder(
+                              padding: EdgeInsets.zero,
+                              shrinkWrap: true,
+                              scrollDirection: Axis.vertical,
+                              itemCount: syllabi.length,
+                              itemBuilder: (context, syllabiIndex) {
+                                final syllabiItem = syllabi[syllabiIndex];
+                                return Align(
+                                  alignment: AlignmentDirectional(0.0, 0.0),
+                                  child: Padding(
+                                    padding: EdgeInsetsDirectional.fromSTEB(
+                                        0.0, 0.0, 0.0, 10.0),
+                                    child: InkWell(
+                                      splashColor: Colors.transparent,
+                                      focusColor: Colors.transparent,
+                                      hoverColor: Colors.transparent,
+                                      highlightColor: Colors.transparent,
+                                      onTap: () async {
+                                        logFirebaseEvent(
+                                            'TASKS_PAGE_Text_36f1k05j_ON_TAP');
+                                        logFirebaseEvent(
+                                            'Text_update_app_state');
+                                        FFAppState().syllabusIndex =
+                                            syllabiIndex;
+                                        safeSetState(() {});
+                                        logFirebaseEvent('Text_drawer');
+                                        if (scaffoldKey
+                                                .currentState!.isDrawerOpen ||
+                                            scaffoldKey.currentState!
+                                                .isEndDrawerOpen) {
+                                          Navigator.pop(context);
+                                        }
+                                      },
+                                      child: Text(
+                                        syllabiItem.title,
+                                        textAlign: TextAlign.center,
                                         style: FlutterFlowTheme.of(context)
                                             .bodyMedium
                                             .override(
@@ -442,7 +274,7 @@ class _TasksWidgetState extends State<TasksWidget> {
                                                         .bodyMedium
                                                         .fontStyle,
                                               ),
-                                              fontSize: 25.0,
+                                              color: Colors.white,
                                               letterSpacing: 0.0,
                                               fontWeight:
                                                   FlutterFlowTheme.of(context)
@@ -452,27 +284,553 @@ class _TasksWidgetState extends State<TasksWidget> {
                                                   FlutterFlowTheme.of(context)
                                                       .bodyMedium
                                                       .fontStyle,
+                                              decoration:
+                                                  TextDecoration.underline,
                                             ),
                                       ),
-                                      ClipRRect(
-                                        borderRadius:
-                                            BorderRadius.circular(8.0),
-                                        child: Image.asset(
-                                          'assets/images/16021504_0.jpg',
-                                          width: 150.0,
-                                          height: 150.0,
-                                          fit: BoxFit.cover,
+                                    ),
+                                  ),
+                                );
+                              },
+                            );
+                          },
+                        ),
+                      ],
+                    ),
+                    InkWell(
+                      splashColor: Colors.transparent,
+                      focusColor: Colors.transparent,
+                      hoverColor: Colors.transparent,
+                      highlightColor: Colors.transparent,
+                      onTap: () async {
+                        logFirebaseEvent('TASKS_PAGE_Text_zlocycip_ON_TAP');
+                        logFirebaseEvent('Text_navigate_to');
+
+                        context.pushNamed(UploadScheduleWidget.routeName);
+                      },
+                      child: Text(
+                        'Add a Syllabus',
+                        style: FlutterFlowTheme.of(context).bodyMedium.override(
+                              font: GoogleFonts.inter(
+                                fontWeight: FlutterFlowTheme.of(context)
+                                    .bodyMedium
+                                    .fontWeight,
+                                fontStyle: FlutterFlowTheme.of(context)
+                                    .bodyMedium
+                                    .fontStyle,
+                              ),
+                              color: Color(0xFF1A6BFF),
+                              fontSize: 20.0,
+                              letterSpacing: 0.0,
+                              fontWeight: FlutterFlowTheme.of(context)
+                                  .bodyMedium
+                                  .fontWeight,
+                              fontStyle: FlutterFlowTheme.of(context)
+                                  .bodyMedium
+                                  .fontStyle,
+                              decoration: TextDecoration.underline,
+                            ),
+                      ),
+                    ),
+                    Builder(
+                      builder: (context) => InkWell(
+                        splashColor: Colors.transparent,
+                        focusColor: Colors.transparent,
+                        hoverColor: Colors.transparent,
+                        highlightColor: Colors.transparent,
+                        onTap: () async {
+                          logFirebaseEvent('TASKS_PAGE_Text_e7hkkybs_ON_TAP');
+                          logFirebaseEvent('Text_close_dialog_drawer_etc');
+                          Navigator.pop(context);
+                          logFirebaseEvent('Text_alert_dialog');
+                          await showDialog(
+                            context: context,
+                            builder: (dialogContext) {
+                              return Dialog(
+                                elevation: 0,
+                                insetPadding: EdgeInsets.zero,
+                                backgroundColor: Colors.transparent,
+                                alignment: AlignmentDirectional(0.0, 0.0)
+                                    .resolve(Directionality.of(context)),
+                                child: GestureDetector(
+                                  onTap: () {
+                                    FocusScope.of(dialogContext).unfocus();
+                                    FocusManager.instance.primaryFocus
+                                        ?.unfocus();
+                                  },
+                                  child: DeletePopupWidget(
+                                    syllabi: tasksStudyPlanRecordList,
+                                  ),
+                                ),
+                              );
+                            },
+                          );
+                        },
+                        child: Text(
+                          'Delete a Syllabus',
+                          textAlign: TextAlign.center,
+                          style:
+                              FlutterFlowTheme.of(context).bodyMedium.override(
+                                    font: GoogleFonts.inter(
+                                      fontWeight: FlutterFlowTheme.of(context)
+                                          .bodyMedium
+                                          .fontWeight,
+                                      fontStyle: FlutterFlowTheme.of(context)
+                                          .bodyMedium
+                                          .fontStyle,
+                                    ),
+                                    color: Color(0xFFEF4444),
+                                    fontSize: 20.0,
+                                    letterSpacing: 0.0,
+                                    fontWeight: FlutterFlowTheme.of(context)
+                                        .bodyMedium
+                                        .fontWeight,
+                                    fontStyle: FlutterFlowTheme.of(context)
+                                        .bodyMedium
+                                        .fontStyle,
+                                    decoration: TextDecoration.underline,
+                                  ),
+                        ),
+                      ),
+                    ),
+                    InkWell(
+                      splashColor: Colors.transparent,
+                      focusColor: Colors.transparent,
+                      hoverColor: Colors.transparent,
+                      highlightColor: Colors.transparent,
+                      onTap: () async {
+                        logFirebaseEvent('TASKS_PAGE_Text_tugko0i4_ON_TAP');
+                        logFirebaseEvent('Text_auth');
+                        GoRouter.of(context).prepareAuthEvent();
+                        await authManager.signOut();
+                        GoRouter.of(context).clearRedirectLocation();
+
+                        context.goNamedAuth(
+                            LoginWidget.routeName, context.mounted);
+                      },
+                      child: Text(
+                        'Sign Out',
+                        style: FlutterFlowTheme.of(context).bodyMedium.override(
+                              font: GoogleFonts.inter(
+                                fontWeight: FlutterFlowTheme.of(context)
+                                    .bodyMedium
+                                    .fontWeight,
+                                fontStyle: FlutterFlowTheme.of(context)
+                                    .bodyMedium
+                                    .fontStyle,
+                              ),
+                              color: Color(0xFFEF4444),
+                              fontSize: 20.0,
+                              letterSpacing: 0.0,
+                              fontWeight: FlutterFlowTheme.of(context)
+                                  .bodyMedium
+                                  .fontWeight,
+                              fontStyle: FlutterFlowTheme.of(context)
+                                  .bodyMedium
+                                  .fontStyle,
+                              decoration: TextDecoration.underline,
+                            ),
+                      ),
+                    ),
+                  ].divide(SizedBox(height: 10.0)),
+                ),
+              ),
+            ),
+            appBar: AppBar(
+              backgroundColor: Color(0xFF1A6BFF),
+              automaticallyImplyLeading: true,
+              actions: [],
+              centerTitle: true,
+              elevation: 0.0,
+            ),
+            body: SafeArea(
+              top: true,
+              child: Column(
+                mainAxisSize: MainAxisSize.max,
+                children: [
+                  Column(
+                    mainAxisSize: MainAxisSize.max,
+                    children: [
+                      Row(
+                        mainAxisSize: MainAxisSize.max,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Align(
+                            alignment: AlignmentDirectional(0.0, 0.0),
+                            child: Padding(
+                              padding: EdgeInsetsDirectional.fromSTEB(
+                                  0.0, 10.0, 0.0, 0.0),
+                              child: Container(
+                                width: 350.0,
+                                decoration: BoxDecoration(),
+                                alignment: AlignmentDirectional(0.0, 0.0),
+                                child: Align(
+                                  alignment: AlignmentDirectional(0.0, 0.0),
+                                  child: Text(
+                                    valueOrDefault<String>(
+                                      tasksStudyPlanRecordList
+                                          .elementAtOrNull(
+                                              FFAppState().syllabusIndex)
+                                          ?.title,
+                                      'Title not Found',
+                                    ),
+                                    textAlign: TextAlign.center,
+                                    style: GoogleFonts.interTight(
+                                      color: Color(0xFF8888AA),
+                                      fontSize: 30.0,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      Container(
+                        width: 220.0,
+                        decoration: BoxDecoration(),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.max,
+                          children: [
+                            Row(
+                              mainAxisSize: MainAxisSize.max,
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                FlutterFlowIconButton(
+                                  borderRadius: 8.0,
+                                  buttonSize: 27.2,
+                                  fillColor: Color(0xFF1A6BFF),
+                                  icon: Icon(
+                                    Icons.arrow_back,
+                                    color: FlutterFlowTheme.of(context).info,
+                                    size: 10.0,
+                                  ),
+                                  onPressed: () async {
+                                    logFirebaseEvent(
+                                        'TASKS_PAGE_arrow_back_ICN_ON_TAP');
+                                    logFirebaseEvent(
+                                        'IconButton_update_app_state');
+                                    FFAppState().WhichWeek = FFAppState()
+                                            .WhichWeek +
+                                        ((FFAppState().WhichWeek > 0) &&
+                                                (FFAppState().WhichWeek <=
+                                                    tasksStudyPlanRecordList
+                                                        .elementAtOrNull(
+                                                            FFAppState()
+                                                                .syllabusIndex)!
+                                                        .totalWeeks)
+                                            ? -1
+                                            : 0);
+                                    safeSetState(() {});
+                                  },
+                                ),
+                                Text(
+                                  'Week: ${valueOrDefault<String>(
+                                    FFAppState().WhichWeek.toString(),
+                                    'Week: 0',
+                                  )}',
+                                  style: FlutterFlowTheme.of(context)
+                                      .bodyMedium
+                                      .override(
+                                        font: GoogleFonts.inter(
+                                          fontWeight:
+                                              FlutterFlowTheme.of(context)
+                                                  .bodyMedium
+                                                  .fontWeight,
+                                          fontStyle:
+                                              FlutterFlowTheme.of(context)
+                                                  .bodyMedium
+                                                  .fontStyle,
+                                        ),
+                                        color: Color(0xFF8888AA),
+                                        fontSize: 20.0,
+                                        letterSpacing: 0.0,
+                                        fontWeight: FlutterFlowTheme.of(context)
+                                            .bodyMedium
+                                            .fontWeight,
+                                        fontStyle: FlutterFlowTheme.of(context)
+                                            .bodyMedium
+                                            .fontStyle,
+                                      ),
+                                ),
+                                FlutterFlowIconButton(
+                                  borderRadius: 8.0,
+                                  buttonSize: 27.2,
+                                  fillColor: Color(0xFF1A6BFF),
+                                  icon: Icon(
+                                    Icons.arrow_forward,
+                                    color: FlutterFlowTheme.of(context).info,
+                                    size: 10.0,
+                                  ),
+                                  onPressed: () async {
+                                    logFirebaseEvent(
+                                        'TASKS_PAGE_arrow_forward_ICN_ON_TAP');
+                                    logFirebaseEvent(
+                                        'IconButton_update_app_state');
+                                    FFAppState().WhichWeek = FFAppState()
+                                            .WhichWeek +
+                                        ((FFAppState().WhichWeek >= 0) &&
+                                                (FFAppState().WhichWeek <
+                                                    (tasksStudyPlanRecordList
+                                                            .elementAtOrNull(
+                                                                FFAppState()
+                                                                    .syllabusIndex)!
+                                                            .totalWeeks -
+                                                        1))
+                                            ? 1
+                                            : 0);
+                                    safeSetState(() {});
+                                  },
+                                ),
+                              ],
+                            ),
+                            Row(
+                              mainAxisSize: MainAxisSize.max,
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                FlutterFlowIconButton(
+                                  borderRadius: 8.0,
+                                  buttonSize: 27.2,
+                                  fillColor: Color(0xFF1A6BFF),
+                                  icon: Icon(
+                                    Icons.arrow_back,
+                                    color: FlutterFlowTheme.of(context).info,
+                                    size: 10.0,
+                                  ),
+                                  onPressed: () async {
+                                    logFirebaseEvent(
+                                        'TASKS_PAGE_arrow_back_ICN_ON_TAP');
+                                    logFirebaseEvent(
+                                        'IconButton_update_app_state');
+                                    FFAppState().WhichWeek = FFAppState()
+                                            .WhichWeek +
+                                        ((FFAppState().DayOfWeek ==
+                                                    DaysOfTheWeek
+                                                        .monday.name) &&
+                                                (FFAppState().WhichWeek > 0) &&
+                                                (FFAppState().WhichWeek <=
+                                                    tasksStudyPlanRecordList
+                                                        .elementAtOrNull(
+                                                            FFAppState()
+                                                                .syllabusIndex)!
+                                                        .totalWeeks)
+                                            ? -1
+                                            : 0);
+                                    safeSetState(() {});
+                                    logFirebaseEvent(
+                                        'IconButton_update_app_state');
+                                    FFAppState().DayOfWeek = () {
+                                      if (FFAppState().DayOfWeek ==
+                                          DaysOfTheWeek.monday.name) {
+                                        return DaysOfTheWeek.friday.name;
+                                      } else if (FFAppState().DayOfWeek ==
+                                          DaysOfTheWeek.friday.name) {
+                                        return DaysOfTheWeek.thursday.name;
+                                      } else if (FFAppState().DayOfWeek ==
+                                          DaysOfTheWeek.thursday.name) {
+                                        return DaysOfTheWeek.wednesday.name;
+                                      } else if (FFAppState().DayOfWeek ==
+                                          DaysOfTheWeek.wednesday.name) {
+                                        return DaysOfTheWeek.tuesday.name;
+                                      } else {
+                                        return DaysOfTheWeek.monday.name;
+                                      }
+                                    }();
+                                    safeSetState(() {});
+                                  },
+                                ),
+                                Text(
+                                  valueOrDefault<String>(
+                                    'Day: ${FFAppState().DayOfWeek}',
+                                    'Day: monday',
+                                  ),
+                                  style: FlutterFlowTheme.of(context)
+                                      .bodyMedium
+                                      .override(
+                                        font: GoogleFonts.inter(
+                                          fontWeight:
+                                              FlutterFlowTheme.of(context)
+                                                  .bodyMedium
+                                                  .fontWeight,
+                                          fontStyle:
+                                              FlutterFlowTheme.of(context)
+                                                  .bodyMedium
+                                                  .fontStyle,
+                                        ),
+                                        color: Color(0xFF8888AA),
+                                        fontSize: 20.0,
+                                        letterSpacing: 0.0,
+                                        fontWeight: FlutterFlowTheme.of(context)
+                                            .bodyMedium
+                                            .fontWeight,
+                                        fontStyle: FlutterFlowTheme.of(context)
+                                            .bodyMedium
+                                            .fontStyle,
+                                      ),
+                                ),
+                                FlutterFlowIconButton(
+                                  borderRadius: 8.0,
+                                  buttonSize: 27.2,
+                                  fillColor: Color(0xFF1A6BFF),
+                                  icon: Icon(
+                                    Icons.arrow_forward,
+                                    color: FlutterFlowTheme.of(context).info,
+                                    size: 10.0,
+                                  ),
+                                  onPressed: () async {
+                                    logFirebaseEvent(
+                                        'TASKS_PAGE_arrow_forward_ICN_ON_TAP');
+                                    logFirebaseEvent(
+                                        'IconButton_update_app_state');
+                                    FFAppState().WhichWeek = FFAppState()
+                                            .WhichWeek +
+                                        ((FFAppState().DayOfWeek ==
+                                                    DaysOfTheWeek
+                                                        .friday.name) &&
+                                                (FFAppState().WhichWeek <
+                                                    (tasksStudyPlanRecordList
+                                                            .elementAtOrNull(
+                                                                FFAppState()
+                                                                    .syllabusIndex)!
+                                                            .totalWeeks -
+                                                        1)) &&
+                                                (FFAppState().WhichWeek >= 0)
+                                            ? 1
+                                            : 0);
+                                    safeSetState(() {});
+                                    logFirebaseEvent(
+                                        'IconButton_update_app_state');
+                                    FFAppState().DayOfWeek = () {
+                                      if (FFAppState().DayOfWeek ==
+                                          DaysOfTheWeek.monday.name) {
+                                        return DaysOfTheWeek.tuesday.name;
+                                      } else if (FFAppState().DayOfWeek ==
+                                          DaysOfTheWeek.tuesday.name) {
+                                        return DaysOfTheWeek.wednesday.name;
+                                      } else if (FFAppState().DayOfWeek ==
+                                          DaysOfTheWeek.wednesday.name) {
+                                        return DaysOfTheWeek.thursday.name;
+                                      } else if (FFAppState().DayOfWeek ==
+                                          DaysOfTheWeek.thursday.name) {
+                                        return DaysOfTheWeek.friday.name;
+                                      } else {
+                                        return DaysOfTheWeek.monday.name;
+                                      }
+                                    }();
+                                    safeSetState(() {});
+                                  },
+                                ),
+                              ],
+                            ),
+                          ]
+                              .divide(SizedBox(height: 10.0))
+                              .around(SizedBox(height: 10.0)),
+                        ),
+                      ),
+                    ],
+                  ),
+                  Align(
+                    alignment: AlignmentDirectional(0.0, 0.0),
+                    child: Container(
+                      width: 350.0,
+                      height: 600.0,
+                      decoration: BoxDecoration(),
+                      child: SingleChildScrollView(
+                        child: Column(
+                          mainAxisSize: MainAxisSize.max,
+                          children: [
+                            Builder(
+                              builder: (context) {
+                                final taskList = functions
+                                    .getDayTasks(
+                                        tasksStudyPlanRecordList
+                                            .elementAtOrNull(
+                                                FFAppState().syllabusIndex)!
+                                            .weeks,
+                                        FFAppState().WhichWeek,
+                                        FFAppState().DayOfWeek)
+                                    .toList();
+
+                                return ListView.builder(
+                                  padding: EdgeInsets.zero,
+                                  shrinkWrap: true,
+                                  scrollDirection: Axis.vertical,
+                                  itemCount: taskList.length,
+                                  itemBuilder: (context, taskListIndex) {
+                                    final taskListItem =
+                                        taskList[taskListIndex];
+                                    return Padding(
+                                      padding: EdgeInsetsDirectional.fromSTEB(
+                                          0.0, 0.0, 0.0, 10.0),
+                                      child: Container(
+                                        width: 70.0,
+                                        decoration: BoxDecoration(
+                                          color: Color(0xFF23233A),
+                                          borderRadius:
+                                              BorderRadius.circular(8.0),
+                                          border: Border.all(
+                                            color: Color(0xFF1A6BFF),
+                                            width: 1.0,
+                                          ),
+                                        ),
+                                        child: Padding(
+                                          padding:
+                                              EdgeInsetsDirectional.fromSTEB(
+                                                  3.0, 3.0, 3.0, 3.0),
+                                          child: Text(
+                                            taskListItem,
+                                            style: FlutterFlowTheme.of(context)
+                                                .bodyMedium
+                                                .override(
+                                                  font: GoogleFonts.inter(
+                                                    fontWeight:
+                                                        FlutterFlowTheme.of(
+                                                                context)
+                                                            .bodyMedium
+                                                            .fontWeight,
+                                                    fontStyle:
+                                                        FlutterFlowTheme.of(
+                                                                context)
+                                                            .bodyMedium
+                                                            .fontStyle,
+                                                  ),
+                                                  color: Color(0xFF8888AA),
+                                                  letterSpacing: 0.0,
+                                                  fontWeight:
+                                                      FlutterFlowTheme.of(
+                                                              context)
+                                                          .bodyMedium
+                                                          .fontWeight,
+                                                  fontStyle:
+                                                      FlutterFlowTheme.of(
+                                                              context)
+                                                          .bodyMedium
+                                                          .fontStyle,
+                                                ),
+                                          ),
                                         ),
                                       ),
-                                      AuthUserStreamWidget(
-                                        builder: (context) => Text(
-                                          valueOrDefault<String>(
-                                            valueOrDefault(
-                                                    currentUserDocument?.streak,
-                                                    0)
-                                                .toString(),
-                                            '0',
-                                          ),
+                                    );
+                                  },
+                                );
+                              },
+                            ),
+                            if (getRemoteConfigBool('show_streak_feature') ==
+                                true)
+                              Container(
+                                width: 150.0,
+                                height: 150.0,
+                                decoration: BoxDecoration(),
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.max,
+                                  children: [
+                                    Row(
+                                      mainAxisSize: MainAxisSize.max,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Text(
+                                          'Streak: ',
                                           style: FlutterFlowTheme.of(context)
                                               .bodyMedium
                                               .override(
@@ -484,7 +842,8 @@ class _TasksWidgetState extends State<TasksWidget> {
                                                           .bodyMedium
                                                           .fontStyle,
                                                 ),
-                                                fontSize: 30.0,
+                                                color: Color(0xFF8888AA),
+                                                fontSize: 25.0,
                                                 letterSpacing: 0.0,
                                                 fontWeight: FontWeight.bold,
                                                 fontStyle:
@@ -493,58 +852,85 @@ class _TasksWidgetState extends State<TasksWidget> {
                                                         .fontStyle,
                                               ),
                                         ),
+                                        AuthUserStreamWidget(
+                                          builder: (context) => Text(
+                                            valueOrDefault<String>(
+                                              valueOrDefault(
+                                                      currentUserDocument
+                                                          ?.streak,
+                                                      0)
+                                                  .toString(),
+                                              '0',
+                                            ),
+                                            style: FlutterFlowTheme.of(context)
+                                                .bodyMedium
+                                                .override(
+                                                  font: GoogleFonts.inter(
+                                                    fontWeight: FontWeight.bold,
+                                                    fontStyle:
+                                                        FlutterFlowTheme.of(
+                                                                context)
+                                                            .bodyMedium
+                                                            .fontStyle,
+                                                  ),
+                                                  color: Color(0xFF8888AA),
+                                                  fontSize: 25.0,
+                                                  letterSpacing: 0.0,
+                                                  fontWeight: FontWeight.bold,
+                                                  fontStyle:
+                                                      FlutterFlowTheme.of(
+                                                              context)
+                                                          .bodyMedium
+                                                          .fontStyle,
+                                                ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    ClipRRect(
+                                      borderRadius: BorderRadius.circular(8.0),
+                                      child: Image.asset(
+                                        'assets/images/16021504_0.jpg',
+                                        width: 100.0,
+                                        height: 100.0,
+                                        fit: BoxFit.cover,
                                       ),
-                                    ],
-                                  ),
+                                    ),
+                                  ],
                                 ),
-                            ]
-                                .divide(SizedBox(height: 10.0))
-                                .around(SizedBox(height: 10.0)),
-                          ),
+                              ),
+                            AnimatedDefaultTextStyle(
+                              style: FlutterFlowTheme.of(context)
+                                  .bodyMedium
+                                  .override(
+                                    font: GoogleFonts.inter(
+                                      fontWeight: FontWeight.bold,
+                                      fontStyle: FlutterFlowTheme.of(context)
+                                          .bodyMedium
+                                          .fontStyle,
+                                    ),
+                                    color: Color(0xFFFBFBFB),
+                                    fontSize: 30.0,
+                                    letterSpacing: 0.0,
+                                    fontWeight: FontWeight.bold,
+                                    fontStyle: FlutterFlowTheme.of(context)
+                                        .bodyMedium
+                                        .fontStyle,
+                                  ),
+                              duration: Duration(milliseconds: 600),
+                              curve: Curves.bounceOut,
+                              child: Text(
+                                'StudySprint',
+                              ),
+                            ),
+                            Icon(
+                              Icons.auto_stories_rounded,
+                              color: Color(0xFF1A6BFF),
+                              size: 35.0,
+                            ),
+                          ].divide(SizedBox(height: 10.0)),
                         ),
                       ),
-                    ),
-                  ),
-                  FFButtonWidget(
-                    onPressed: () async {
-                      logFirebaseEvent('TASKS_PAGE_LOGOUT_BTN_ON_TAP');
-                      logFirebaseEvent('Button_auth');
-                      GoRouter.of(context).prepareAuthEvent();
-                      await authManager.signOut();
-                      GoRouter.of(context).clearRedirectLocation();
-
-                      context.goNamedAuth(
-                          LoginWidget.routeName, context.mounted);
-                    },
-                    text: 'Logout',
-                    options: FFButtonOptions(
-                      height: 40.0,
-                      padding:
-                          EdgeInsetsDirectional.fromSTEB(16.0, 0.0, 16.0, 0.0),
-                      iconPadding:
-                          EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
-                      color: FlutterFlowTheme.of(context).primary,
-                      textStyle:
-                          FlutterFlowTheme.of(context).titleSmall.override(
-                                font: GoogleFonts.interTight(
-                                  fontWeight: FlutterFlowTheme.of(context)
-                                      .titleSmall
-                                      .fontWeight,
-                                  fontStyle: FlutterFlowTheme.of(context)
-                                      .titleSmall
-                                      .fontStyle,
-                                ),
-                                color: Colors.white,
-                                letterSpacing: 0.0,
-                                fontWeight: FlutterFlowTheme.of(context)
-                                    .titleSmall
-                                    .fontWeight,
-                                fontStyle: FlutterFlowTheme.of(context)
-                                    .titleSmall
-                                    .fontStyle,
-                              ),
-                      elevation: 0.0,
-                      borderRadius: BorderRadius.circular(8.0),
                     ),
                   ),
                 ],

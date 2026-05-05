@@ -80,3 +80,13 @@ String getWeeksTheme(
     return '';
   }
 }
+
+DocumentReference getDocID(
+  String userID,
+  int studyPlanNumber,
+) {
+  String documentId = '$userID-$studyPlanNumber';
+  DocumentReference studyPlanRef =
+      FirebaseFirestore.instance.collection('studyPlans').doc(documentId);
+  return studyPlanRef; // Return the document ID or use the reference as needed
+}

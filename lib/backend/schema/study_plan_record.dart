@@ -45,6 +45,16 @@ class StudyPlanRecord extends FirestoreRecord {
   DocumentReference? get user => _user;
   bool hasUser() => _user != null;
 
+  // "numOfStudyPlan" field.
+  int? _numOfStudyPlan;
+  int get numOfStudyPlan => _numOfStudyPlan ?? 0;
+  bool hasNumOfStudyPlan() => _numOfStudyPlan != null;
+
+  // "isDeleted" field.
+  bool? _isDeleted;
+  bool get isDeleted => _isDeleted ?? false;
+  bool hasIsDeleted() => _isDeleted != null;
+
   void _initializeFields() {
     _title = snapshotData['title'] as String?;
     _totalWeeks = castToType<int>(snapshotData['totalWeeks']);
@@ -52,6 +62,8 @@ class StudyPlanRecord extends FirestoreRecord {
     _userId = snapshotData['userId'] as String?;
     _weeks = snapshotData['weeks'] as String?;
     _user = snapshotData['user'] as DocumentReference?;
+    _numOfStudyPlan = castToType<int>(snapshotData['numOfStudyPlan']);
+    _isDeleted = snapshotData['isDeleted'] as bool?;
   }
 
   static CollectionReference get collection =>
@@ -95,6 +107,8 @@ Map<String, dynamic> createStudyPlanRecordData({
   String? userId,
   String? weeks,
   DocumentReference? user,
+  int? numOfStudyPlan,
+  bool? isDeleted,
 }) {
   final firestoreData = mapToFirestore(
     <String, dynamic>{
@@ -104,6 +118,8 @@ Map<String, dynamic> createStudyPlanRecordData({
       'userId': userId,
       'weeks': weeks,
       'user': user,
+      'numOfStudyPlan': numOfStudyPlan,
+      'isDeleted': isDeleted,
     }.withoutNulls,
   );
 
@@ -120,12 +136,22 @@ class StudyPlanRecordDocumentEquality implements Equality<StudyPlanRecord> {
         e1?.timeCreated == e2?.timeCreated &&
         e1?.userId == e2?.userId &&
         e1?.weeks == e2?.weeks &&
-        e1?.user == e2?.user;
+        e1?.user == e2?.user &&
+        e1?.numOfStudyPlan == e2?.numOfStudyPlan &&
+        e1?.isDeleted == e2?.isDeleted;
   }
 
   @override
-  int hash(StudyPlanRecord? e) => const ListEquality().hash(
-      [e?.title, e?.totalWeeks, e?.timeCreated, e?.userId, e?.weeks, e?.user]);
+  int hash(StudyPlanRecord? e) => const ListEquality().hash([
+        e?.title,
+        e?.totalWeeks,
+        e?.timeCreated,
+        e?.userId,
+        e?.weeks,
+        e?.user,
+        e?.numOfStudyPlan,
+        e?.isDeleted
+      ]);
 
   @override
   bool isValidKey(Object? o) => o is StudyPlanRecord;

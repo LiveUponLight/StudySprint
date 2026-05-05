@@ -91,6 +91,11 @@ class UserRecord extends FirestoreRecord {
   bool get hasCompletedNPS => _hasCompletedNPS ?? false;
   bool hasHasCompletedNPS() => _hasCompletedNPS != null;
 
+  // "numOfStudyPlans" field.
+  int? _numOfStudyPlans;
+  int get numOfStudyPlans => _numOfStudyPlans ?? 0;
+  bool hasNumOfStudyPlans() => _numOfStudyPlans != null;
+
   void _initializeFields() {
     _email = snapshotData['email'] as String?;
     _displayName = snapshotData['display_name'] as String?;
@@ -107,6 +112,7 @@ class UserRecord extends FirestoreRecord {
     _lastStudy = snapshotData['lastStudy'] as DateTime?;
     _daysSinceLastStudy = castToType<int>(snapshotData['daysSinceLastStudy']);
     _hasCompletedNPS = snapshotData['hasCompletedNPS'] as bool?;
+    _numOfStudyPlans = castToType<int>(snapshotData['numOfStudyPlans']);
   }
 
   static CollectionReference get collection =>
@@ -157,6 +163,7 @@ Map<String, dynamic> createUserRecordData({
   DateTime? lastStudy,
   int? daysSinceLastStudy,
   bool? hasCompletedNPS,
+  int? numOfStudyPlans,
 }) {
   final firestoreData = mapToFirestore(
     <String, dynamic>{
@@ -174,6 +181,7 @@ Map<String, dynamic> createUserRecordData({
       'lastStudy': lastStudy,
       'daysSinceLastStudy': daysSinceLastStudy,
       'hasCompletedNPS': hasCompletedNPS,
+      'numOfStudyPlans': numOfStudyPlans,
     }.withoutNulls,
   );
 
@@ -200,7 +208,8 @@ class UserRecordDocumentEquality implements Equality<UserRecord> {
         e1?.daysSinceLastVisit == e2?.daysSinceLastVisit &&
         e1?.lastStudy == e2?.lastStudy &&
         e1?.daysSinceLastStudy == e2?.daysSinceLastStudy &&
-        e1?.hasCompletedNPS == e2?.hasCompletedNPS;
+        e1?.hasCompletedNPS == e2?.hasCompletedNPS &&
+        e1?.numOfStudyPlans == e2?.numOfStudyPlans;
   }
 
   @override
@@ -219,7 +228,8 @@ class UserRecordDocumentEquality implements Equality<UserRecord> {
         e?.daysSinceLastVisit,
         e?.lastStudy,
         e?.daysSinceLastStudy,
-        e?.hasCompletedNPS
+        e?.hasCompletedNPS,
+        e?.numOfStudyPlans
       ]);
 
   @override

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'flutter_flow/flutter_flow_util.dart';
 
 class FFAppState extends ChangeNotifier {
   static FFAppState _instance = FFAppState._internal();
@@ -22,6 +23,19 @@ class FFAppState extends ChangeNotifier {
     _safeInit(() {
       _WhichWeek = prefs.getInt('ff_WhichWeek') ?? _WhichWeek;
     });
+    _safeInit(() {
+      _TempWeeks = prefs.getString('ff_TempWeeks') ?? _TempWeeks;
+    });
+    _safeInit(() {
+      _Prompt = prefs.getString('ff_Prompt') ?? _Prompt;
+    });
+    _safeInit(() {
+      _currentStudyPlan =
+          prefs.getString('ff_currentStudyPlan')?.ref ?? _currentStudyPlan;
+    });
+    _safeInit(() {
+      _syllabusIndex = prefs.getInt('ff_syllabusIndex') ?? _syllabusIndex;
+    });
   }
 
   void update(VoidCallback callback) {
@@ -30,12 +44,6 @@ class FFAppState extends ChangeNotifier {
   }
 
   late SharedPreferences prefs;
-
-  String _apiweek = '';
-  String get apiweek => _apiweek;
-  set apiweek(String value) {
-    _apiweek = value;
-  }
 
   String _DayOfWeek = 'monday';
   String get DayOfWeek => _DayOfWeek;
@@ -49,6 +57,42 @@ class FFAppState extends ChangeNotifier {
   set WhichWeek(int value) {
     _WhichWeek = value;
     prefs.setInt('ff_WhichWeek', value);
+  }
+
+  String _TempWeeks = '';
+  String get TempWeeks => _TempWeeks;
+  set TempWeeks(String value) {
+    _TempWeeks = value;
+    prefs.setString('ff_TempWeeks', value);
+  }
+
+  String _Prompt = '';
+  String get Prompt => _Prompt;
+  set Prompt(String value) {
+    _Prompt = value;
+    prefs.setString('ff_Prompt', value);
+  }
+
+  bool _PreviewExpanded = false;
+  bool get PreviewExpanded => _PreviewExpanded;
+  set PreviewExpanded(bool value) {
+    _PreviewExpanded = value;
+  }
+
+  DocumentReference? _currentStudyPlan;
+  DocumentReference? get currentStudyPlan => _currentStudyPlan;
+  set currentStudyPlan(DocumentReference? value) {
+    _currentStudyPlan = value;
+    value != null
+        ? prefs.setString('ff_currentStudyPlan', value.path)
+        : prefs.remove('ff_currentStudyPlan');
+  }
+
+  int _syllabusIndex = 0;
+  int get syllabusIndex => _syllabusIndex;
+  set syllabusIndex(int value) {
+    _syllabusIndex = value;
+    prefs.setInt('ff_syllabusIndex', value);
   }
 }
 

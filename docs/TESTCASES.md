@@ -1,0 +1,8 @@
+< https://docs.google.com/presentation/d/1vac_KtkWrsKunFjZz1rPsAgwyCPvHwu1lNlKejV0nBM/edit?usp=sharing > - US1: User Account Creation
+< https://docs.google.com/presentation/d/1Tdj1crd3yM6Sl4wKs_aYTeBMTBg6KC326Gtlf7Bwylo/edit?usp=sharing > - US2: Login in
+
+US3: Profile Creation - https://docs.google.com/presentation/d/1sFsl_EXrfDmdfa8WKGFOvIR4TWdovFsWI2N9rZFIU0A/edit?usp=sharing
+
+[US4: Golden Path - Upload Syllabus, Confirm, View](https://docs.google.com/presentation/d/10RTkB_1vKro2tQ_lKv8Au42yL4r9Dioy9PSR63hKeWo/edit?usp=sharing)
+
+US5: AI Integration - https://docs.google.com/presentation/d/1zxUkZZ99a4S7sb_XNGjbY8g-6vA770cO2yp9_E-8_qY/edit?usp=sharing
